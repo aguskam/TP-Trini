@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONTROL DE LISTA ESCOLAR</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <header>
+        <h1>CONTROL DE LISTA DE ASISTENCIA</h1>
+    </header>
+
+    <main>
+        <section id="MODULO_LISTA">
+            <h2>TOMAR ASISTENCIA POR MATERIA</h2>
+
+            <div class="CONTENEDOR_SELECTORES">
+                <div>
+                    <label for="selectorCurso">SELECCIONAR CURSO:</label>
+                    <select id="selectorCurso">
+                        <option value="">-- SELECCIONE UN CURSO --</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="selectorMateria">SELECCIONAR MATERIA:</label>
+                    <select id="selectorMateria" disabled>
+                        <option value="">-- SELECCIONE CURSO PRIMERO --</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="listaAlumnos" class="listaAsistencia">
+                <p>Selecciona un curso y una materia para cargar la lista de alumnos</p>
+            </div>
+            
+            <hr>
+        </section>
+
+        <section id="MODULO_ALTA_ALUMNO">
+            <h2>ALTA DE ALUMNO NUEVO</h2>
+
+            <form id="formularioAltaAlumno" class="FORMULARIO_ALTA">
+                <div class="CAMPO_ALUMNO">
+                    <label for="inputNombre">NOMBRE:</label>
+                    <input type="text" id="inputNombre" required>
+                </div>
+                
+                <div class="CAMPO_ALUMNO">
+                    <label for="inputApellido">APELLIDO:</label>
+                    <input type="text" id="inputApellido" required>
+                </div>
+                
+                <div class="CAMPO_ALUMNO">
+                    <label for="selectorCursoNuevo">CURSO DE ASIGNACIÓN:</label>
+                    <select id="selectorCursoNuevo" required>
+                        <option value="">-- SELECCIONE CURSO --</option>
+                    </select>
+                </div>
+                
+                <button type="submit" id="botonAltaAlumno">REGISTRAR ALUMNO</button>
+                <p id="mensajeRespuesta"></p>
+            </form>
+        </section>
+
+        <hr>
+
+        <section id="MODULO_HISTORIAL">
+            <h2>HISTORIAL DE ASISTENCIA</h2>
+            <div class="CONTENEDOR_SELECTORES">
+                <div>
+                    <label for="fechaInicio">DESDE:</label>
+                    <input type="date" id="fechaInicio">
+                </div>
+                <div>
+                    <label for="fechaFin">HASTA:</label>
+                    <input type="date" id="fechaFin">
+                </div>
+                <button id="botonFiltrar">APLICAR FILTRO</button>
+            </div>
+
+            <div id="contenedorTablaHistorial" class="contenedorTablaHistorial">
+                <p>Ingrese un rango de fechas para ver los registros...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="main.js"></script>
+</body>
+</html>
