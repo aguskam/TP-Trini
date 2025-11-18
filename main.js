@@ -1,11 +1,8 @@
 const URL_BASE = 'http://localhost:3000'; 
 const ESTADOS_VALIDOS = ['P', 'A', 'T', 'RA', 'AP']; // <<-- Array de estados para edición
 
-// ====================================================================
-// --- FUNCIONES GLOBALES ---
-// ====================================================================
 
-// 1. Carga de Cursos
+
 async function cargarCursos() {
     const selectorCurso = document.getElementById('selectorCurso');
     const selectorCursoNuevo = document.getElementById('selectorCursoNuevo');
@@ -26,7 +23,7 @@ async function cargarCursos() {
     }
 }
 
-// 2. Carga de Materias
+
 async function cargarMaterias(cursoId) {
     const selectorMateria = document.getElementById('selectorMateria');
     selectorMateria.innerHTML = '<option value="">-- CARGANDO MATERIAS --</option>';
@@ -57,7 +54,7 @@ async function cargarMaterias(cursoId) {
     }
 }
 
-// 3. Carga de Alumnos (Incluye el botón 'AP')
+
 async function cargarAlumnos(cursoId, materiaId) {
     const listaAlumnos = document.getElementById('listaAlumnos');
     listaAlumnos.innerHTML = '<p>Cargando alumnos...</p>';
@@ -119,7 +116,6 @@ async function cargarAlumnos(cursoId, materiaId) {
     }
 }
 
-// 4. Manejar el click de Asistencia (sin cambios en la lógica base)
 window.manejarBloqueAsistencia = async function(boton) {
     const selectorCurso = document.getElementById('selectorCurso');
     const selectorMateria = document.getElementById('selectorMateria');
@@ -165,7 +161,7 @@ window.manejarBloqueAsistencia = async function(boton) {
     }
 }
 
-// 5. Carga de Historial (Ahora incluye botones de edición)
+
 async function cargarHistorial(fechaInicio, fechaFin) {
     const contenedorTablaHistorial = document.getElementById('contenedorTablaHistorial');
     contenedorTablaHistorial.innerHTML = '<p>Cargando registros...</p>';
@@ -224,7 +220,7 @@ async function cargarHistorial(fechaInicio, fechaFin) {
     }
 }
 
-// 7. Manejar la Edición del Registro (Botón E)
+
 window.manejarEditarAsistencia = async function(registroId) {
     const inputInicio = document.getElementById('fechaInicio');
     const inputFin = document.getElementById('fechaFin');
@@ -232,7 +228,7 @@ window.manejarEditarAsistencia = async function(registroId) {
     const nuevoEstado = prompt(`Ingrese el nuevo estado para el registro ID ${registroId}. Opciones válidas: ${ESTADOS_VALIDOS.join(', ')}`);
     
     if (!nuevoEstado) {
-        return; // El usuario canceló o dejó vacío
+        return; 
     }
     
     const estadoUpper = nuevoEstado.toUpperCase();
@@ -250,16 +246,16 @@ window.manejarEditarAsistencia = async function(registroId) {
         });
 
         if (respuesta.ok) {
-            alert('✅ Registro actualizado con éxito.');
+            alert('Registro actualizado con éxito.');
             cargarHistorial(inputInicio.value, inputFin.value);
             // Opcionalmente, también recargar la lista de alumnos para actualizar el "ÚLTIMO REGISTRO"
         } else {
             const errorData = await respuesta.json();
-            alert(`❌ Error al actualizar: ${errorData.message}`);
+            alert(`error al actualizar: ${errorData.message}`);
         }
     } catch (error) {
         console.error('Error al editar:', error);
-        alert('❌ ERROR CRÍTICO DE CONEXIÓN al editar.');
+        alert(' ERROR CRÍTICO DE CONEXIÓN al editar.');
     }
 }
 
@@ -278,21 +274,21 @@ window.manejarBorrarAsistencia = async function(registroId) {
         });
 
         if (respuesta.ok) {
-            alert('🗑️ Registro eliminado con éxito.');
+            alert('Registro eliminado con éxito.');
             cargarHistorial(inputInicio.value, inputFin.value);
             // Opcionalmente, recargar la lista de alumnos
         } else {
             const errorData = await respuesta.json();
-            alert(`❌ Error al eliminar: ${errorData.message}`);
+            alert(`Error al eliminar: ${errorData.message}`);
         }
     } catch (error) {
         console.error('Error al eliminar:', error);
-        alert('❌ ERROR CRÍTICO DE CONEXIÓN al eliminar.');
+        alert('ERROR CRÍTICO DE CONEXIÓN al eliminar.');
     }
 }
 
 
-// 6. Configurar fechas por defecto
+
 function configurarFechasPorDefecto() {
     const inputInicio = document.getElementById('fechaInicio');
     const inputFin = document.getElementById('fechaFin');
@@ -313,7 +309,6 @@ function configurarFechasPorDefecto() {
 }
 
 
-// --- EVENT LISTENER PRINCIPAL (Cuando la página carga) ---
 
 document.addEventListener('DOMContentLoaded', () => {
     // Definición de selectores 
@@ -330,7 +325,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const mensajeRespuesta = document.getElementById('mensajeRespuesta');
 
 
-    // 1. Selector de Curso
     selectorCurso.addEventListener('change', () => {
         const cursoId = selectorCurso.value;
         const materiaId = selectorMateria.value;
@@ -338,21 +332,18 @@ document.addEventListener('DOMContentLoaded', () => {
         cargarAlumnos(cursoId, materiaId);
     });
 
-    // 2. Selector de Materia
     selectorMateria.addEventListener('change', () => {
         const cursoId = selectorCurso.value;
         const materiaId = selectorMateria.value;
         cargarAlumnos(cursoId, materiaId);
     });
     
-    // 3. Botón Filtrar Historial
     botonFiltrar.addEventListener('click', () => {
         const inicio = inputInicio.value;
         const fin = inputFin.value;
         cargarHistorial(inicio, fin);
     });
 
-    // 4. Alta de nuevo alumno (Lógica del formulario)
     formularioAltaAlumno.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -398,10 +389,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
-    // --- INICIALIZACIÓN ---
     
     cargarCursos();
     configurarFechasPorDefecto(); 
     cargarHistorial(inputInicio.value, inputFin.value);
+
 });
