@@ -8,9 +8,6 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
-// -------------------------------------------------------------------
-// 1. CONFIGURACIÓN DB
-// -------------------------------------------------------------------
 const dbConfig = {
     host: '127.0.0.1', 
     user: 'root', 
@@ -24,16 +21,11 @@ const db = mysql.createConnection(dbConfig);
 db.connect(err => {
     if (err) {
         console.error('error db:', err.stack);
-        console.log('🔴 error: revisa mysql en xampp.');
+        console.log(' error: revisa mysql en xampp.');
         return;
     }
-    console.log(`✅ conexión a "${dbConfig.database}" exitosa.`);
+    console.log(`conexión a "${dbConfig.database}" exitosa.`);
 });
-
-
-// -------------------------------------------------------------------
-// 2. ENDPOINTS
-// -------------------------------------------------------------------
 
 // obtener cursos
 app.get('/cursos', (req, res) => {
@@ -43,7 +35,6 @@ app.get('/cursos', (req, res) => {
     });
 });
 
-// obtener materias por id de curso
 app.get('/materias/:cursoId', (req, res) => {
     const { cursoId } = req.params;
     const sql = `
@@ -58,7 +49,7 @@ app.get('/materias/:cursoId', (req, res) => {
     });
 });
 
-// obtener alumnos por id de curso
+
 app.get('/alumnos/:cursoId', (req, res) => {
     const { cursoId } = req.params;
     const sql = 'SELECT id, nombre, apellido FROM alumnos WHERE curso_id = ? ORDER BY apellido';
@@ -141,11 +132,8 @@ app.get('/historial', (req, res) => {
 });
 
 
-// -------------------------------------------------------------------
-// 3. ENDPOINTS PARA EDICIÓN Y BORRADO (NUEVOS)
-// -------------------------------------------------------------------
 
-// EDITAR estado de un registro (Botón E)
+// EDITAR estado de un registro 
 app.put('/registro/:id', (req, res) => {
     const registroId = req.params.id;
     const { estado } = req.body;
@@ -166,7 +154,7 @@ app.put('/registro/:id', (req, res) => {
     });
 });
 
-// ELIMINAR un registro (Botón X)
+// ELIMINAR un registro
 app.delete('/registro/:id', (req, res) => {
     const registroId = req.params.id;
 
@@ -201,5 +189,6 @@ app.post('/alumno', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 servidor corriendo en http://localhost:${PORT}`);
+    console.log(`servidor corriendo en http://localhost:${PORT}`);
+
 });
