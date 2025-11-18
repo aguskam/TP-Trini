@@ -1,5 +1,5 @@
 const URL_BASE = 'http://localhost:3000'; 
-const ESTADOS_VALIDOS = ['P', 'A', 'T', 'RA', 'AP']; // <<-- Array de estados para edición
+const ESTADOS_VALIDOS = ['P', 'A', 'T', 'RA', 'AP']; 
 
 
 
@@ -395,3 +395,4 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarHistorial(inputInicio.value, inputFin.value);
 
 });
+
