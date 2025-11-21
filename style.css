@@ -1,14 +1,13 @@
-
 body {
     font-family: 'Roboto', sans-serif; 
     margin: 0;
     padding: 0;
-    background-color: #f8f8f8; 
-    color: #333;
+    background-color: #ffffff; 
+    color: #333333; 
 }
 
 header {
-    color: rgb(0, 0, 0);
+    color: #000000; 
     padding: 15px 0;
     text-align: center;
     margin-bottom: 20px;
@@ -33,8 +32,6 @@ h3, h2 {
     margin-bottom: 20px;
 }
 
-
-
 .listaAsistencia {
     width: 90%;
     max-width: 800px;
@@ -49,50 +46,35 @@ h3, h2 {
 .tablaAsistencia th, .tablaAsistencia td {
     padding: 8px;
     text-align: center;
-    border: 1px solid #ddd;
+    border: 1px solid #cccccc;
 }
 
 .tablaAsistencia th {
-    background-color: #f2f2f2;
-}
-
-
-.bloque_estado {
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: #f9f9f9;
-    font-weight: bold;
-    transition: background-color 0.2s;
-    width: 40px;
-}
-
-.bloque_estado:hover {
     background-color: #e0e0e0;
 }
 
-.bloque_estado.ACTIVO {
-    color: white;
+.checkbox-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
 }
 
-/* Colores de estados */
-.bloque_estado[data-estado="P"] { background-color: #28a745; color: white; border-color: #28a745; }
-.bloque_estado[data-estado="A"] { background-color: #dc3545; color: white; border-color: #dc3545; }
-.bloque_estado[data-estado="T"] { background-color: #ffc107; color: #333; border-color: #ffc107; }
-.bloque_estado[data-estado="RA"] { background-color: #17a2b8; color: white; border-color: #17a2b8; }
-.bloque_estado[data-estado="AP"] { background-color: #6f42c1; color: white; border-color: #6f42c1; } 
-
-
-.bloque_estado.ACTIVO[data-estado="P"], .bloque_estado.ACTIVO[data-estado="T"], .bloque_estado.ACTIVO[data-estado="RA"], .bloque_estado.ACTIVO[data-estado="AP"] {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    border: 3px solid black;
-}
-.bloque_estado.ACTIVO[data-estado="A"] {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    border: 3px solid yellow;
+.custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #000000; 
+    border-radius: 4px; 
+    background-color: #ffffff; 
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
+.custom-checkbox.ACTIVO {
+    background-color: #000000; 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); 
+}
 
 .contenedorTablaHistorial {
     width: 90%;
@@ -109,22 +91,20 @@ h3, h2 {
 
 .history-table th, .history-table td {
     padding: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid #cccccc;
     text-align: left;
 }
 
 .history-table th {
-    background-color: #f2f2f2;
+    background-color: #e0e0e0;
     text-align: center;
 }
 
-
-.history-table .estado-P { background-color: #d4edda; color: #155724; font-weight: bold; }
-.history-table .estado-A { background-color: #f8d7da; color: #721c24; font-weight: bold; }
-.history-table .estado-T { background-color: #fff3cd; color: #856404; font-weight: bold; }
-.history-table .estado-RA { background-color: #d1ecf1; color: #0c5460; font-weight: bold; }
-.history-table .estado-AP { background-color: #e0d9f4; color: #4b1a85; font-weight: bold; } 
-
+.history-table .estado-P { background-color: #f0f0f0; color: #333; font-weight: bold; }
+.history-table .estado-A { background-color: #d0d0d0; color: #000; font-weight: bold; }
+.history-table .estado-T { background-color: #e0e0e0; color: #333; font-weight: bold; }
+.history-table .estado-RA { background-color: #f5f5f5; color: #333; font-weight: bold; }
+.history-table .estado-AP { background-color: #c0c0c0; color: #000; font-weight: bold; } 
 
 .history-actions button {
     padding: 5px 10px;
@@ -137,13 +117,14 @@ h3, h2 {
 }
 
 .edit-btn {
-    background-color: #007bff; /* Azul */
+    background-color: #666666; 
+    color: white;
 }
 
 .delete-btn {
-    background-color: #dc3545; /* Rojo */
+    background-color: #333333; 
+    color: white;
 }
-
 
 .history-table tbody tr:nth-child(even) {
     background-color: #f2f2f2;
@@ -176,14 +157,14 @@ h3, h2 {
 
 .FORMULARIO_ALTA input, .FORMULARIO_ALTA select {
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     border-radius: 4px;
     margin-top: 5px;
 }
 
 #botonAltaAlumno {
     padding: 10px;
-    background-color: #007bff;
+    background-color: #000000; 
     color: white;
     border: none;
     border-radius: 4px;
