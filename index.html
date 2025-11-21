@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CONTROL DE LISTA ESCOLAR</title>
+    <title>Control de lista escolar</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,25 +13,25 @@
 </head>
 <body>
     <header>
-        <h1>CONTROL DE LISTA DE ASISTENCIA</h1>
+        <h1>Control de lista de asistencia</h1>
     </header>
 
     <main>
         <section id="MODULO_LISTA">
-            <h2>TOMAR ASISTENCIA POR MATERIA</h2>
+            <h2>Tomar asistencia por materia</h2>
 
             <div class="CONTENEDOR_SELECTORES">
                 <div>
-                    <label for="selectorCurso">SELECCIONAR CURSO:</label>
+                    <label for="selectorCurso">Seleccionar curso:</label>
                     <select id="selectorCurso">
-                        <option value="">-- SELECCIONE UN CURSO --</option>
+                        <option value="">-- Seleccione un curso --</option>
                     </select>
                 </div>
                 
                 <div>
-                    <label for="selectorMateria">SELECCIONAR MATERIA:</label>
+                    <label for="selectorMateria">Seleccionar materia:</label>
                     <select id="selectorMateria" disabled>
-                        <option value="">-- SELECCIONE CURSO PRIMERO --</option>
+                        <option value="">-- Seleccione curso primero --</option>
                     </select>
                 </div>
             </div>
@@ -44,27 +44,27 @@
         </section>
 
         <section id="MODULO_ALTA_ALUMNO">
-            <h2>ALTA DE ALUMNO NUEVO</h2>
+            <h2>Alta de alumno nuevo</h2>
 
             <form id="formularioAltaAlumno" class="FORMULARIO_ALTA">
                 <div class="CAMPO_ALUMNO">
-                    <label for="inputNombre">NOMBRE:</label>
+                    <label for="inputNombre">Nombre:</label>
                     <input type="text" id="inputNombre" required>
                 </div>
                 
                 <div class="CAMPO_ALUMNO">
-                    <label for="inputApellido">APELLIDO:</label>
+                    <label for="inputApellido">Apellido:</label>
                     <input type="text" id="inputApellido" required>
                 </div>
                 
                 <div class="CAMPO_ALUMNO">
-                    <label for="selectorCursoNuevo">CURSO DE ASIGNACIÓN:</label>
+                    <label for="selectorCursoNuevo">Curso de asignación:</label>
                     <select id="selectorCursoNuevo" required>
-                        <option value="">-- SELECCIONE CURSO --</option>
+                        <option value="">-- Seleccione curso --</option>
                     </select>
                 </div>
                 
-                <button type="submit" id="botonAltaAlumno">REGISTRAR ALUMNO</button>
+                <button type="submit" id="botonAltaAlumno">Registrar alumno</button>
                 <p id="mensajeRespuesta"></p>
             </form>
         </section>
@@ -72,17 +72,17 @@
         <hr>
 
         <section id="MODULO_HISTORIAL">
-            <h2>HISTORIAL DE ASISTENCIA</h2>
+            <h2>Historial de asistencia</h2>
             <div class="CONTENEDOR_SELECTORES">
                 <div>
-                    <label for="fechaInicio">DESDE:</label>
+                    <label for="fechaInicio">Desde:</label>
                     <input type="date" id="fechaInicio">
                 </div>
                 <div>
-                    <label for="fechaFin">HASTA:</label>
+                    <label for="fechaFin">Hasta:</label>
                     <input type="date" id="fechaFin">
                 </div>
-                <button id="botonFiltrar">APLICAR FILTRO</button>
+                <button id="botonFiltrar">Aplicar filtro</button>
             </div>
 
             <div id="contenedorTablaHistorial" class="contenedorTablaHistorial">
