@@ -1,7 +1,16 @@
 const URL_BASE = 'http://localhost:3000'; 
 const ESTADOS_VALIDOS = ['P', 'A', 'T', 'RA', 'AP']; 
+const NOMBRES_ESTADO = {
+    'P': 'PRESENTE', 
+    'A': 'AUSENTE', 
+    'T': 'TARDE', 
+    'RA': 'RET. C/ AV.', 
+    'AP': 'ABS. JUST.'
+};
 
-
+function obtenerNombreEstado(estado) {
+    return NOMBRES_ESTADO[estado] || estado;
+}
 
 async function cargarCursos() {
     const selectorCurso = document.getElementById('selectorCurso');
@@ -15,8 +24,8 @@ async function cargarCursos() {
             `<option value="${curso.id}">${curso.nombre}</option>`
         ).join('');
 
-        selectorCurso.innerHTML = '<option value="">-- SELECCIONE UN CURSO --</option>' + opcionesCursos;
-        selectorCursoNuevo.innerHTML = '<option value="">-- SELECCIONE CURSO --</option>' + opcionesCursos;
+        selectorCurso.innerHTML = '<option value="">-- Seleccione un curso --</option>' + opcionesCursos;
+        selectorCursoNuevo.innerHTML = '<option value="">-- Seleccione curso --</option>' + opcionesCursos;
         
     } catch (error) {
         console.error('Error al cargar cursos:', error);
@@ -26,11 +35,11 @@ async function cargarCursos() {
 
 async function cargarMaterias(cursoId) {
     const selectorMateria = document.getElementById('selectorMateria');
-    selectorMateria.innerHTML = '<option value="">-- CARGANDO MATERIAS --</option>';
+    selectorMateria.innerHTML = '<option value="">-- Cargando materias --</option>';
     selectorMateria.disabled = true;
 
     if (!cursoId) {
-        selectorMateria.innerHTML = '<option value="">-- SELECCIONE CURSO PRIMERO --</option>';
+        selectorMateria.innerHTML = '<option value="">-- Seleccione curso primero --</option>';
         return;
     }
 
@@ -39,18 +48,18 @@ async function cargarMaterias(cursoId) {
         const materias = await respuesta.json();
         
         if (materias.length === 0) {
-            selectorMateria.innerHTML = '<option value="">-- NO HAY MATERIAS ASIGNADAS --</option>';
+            selectorMateria.innerHTML = '<option value="">-- No hay materias asignadas --</option>';
         } else {
             const opcionesMaterias = materias.map(materia => 
                 `<option value="${materia.id}">${materia.nombre}</option>`
             ).join('');
-            selectorMateria.innerHTML = '<option value="">-- SELECCIONE UNA MATERIA --</option>' + opcionesMaterias;
+            selectorMateria.innerHTML = '<option value="">-- Seleccione una materia --</option>' + opcionesMaterias;
             selectorMateria.disabled = false;
         }
 
     } catch (error) {
         console.error('Error al cargar materias:', error);
-        selectorMateria.innerHTML = '<p>ERROR DE CONEXIÓN.</p>';
+        selectorMateria.innerHTML = '<p>Error de conexión.</p>';
     }
 }
 
@@ -78,11 +87,8 @@ async function cargarAlumnos(cursoId, materiaId) {
                 <thead>
                     <tr>
                         <th>APELLIDO, NOMBRE</th>
-                        <th>PRESENTE</th>
-                        <th>AUSENTE</th>
-                        <th>TARDE</th>
-                        <th>RET. C/ AV.</th>
-                        <th>ABS. JUST.</th> <th>ÚLTIMO REGISTRO</th>
+                        ${ESTADOS_VALIDOS.map(e => `<th>${obtenerNombreEstado(e)}</th>`).join('')}
+                        <th>ÚLTIMO REGISTRO</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -98,11 +104,18 @@ async function cargarAlumnos(cursoId, materiaId) {
             tablaHTML += `
                 <tr>
                     <td>${alumno.apellido}, ${alumno.nombre}</td>
-                    <td><button class="bloque_estado ${getClaseActiva('P')}" data-alumno-id="${alumno.id}" data-estado="P" onclick="manejarBloqueAsistencia(this)">P</button></td>
-                    <td><button class="bloque_estado ${getClaseActiva('A')}" data-alumno-id="${alumno.id}" data-estado="A" onclick="manejarBloqueAsistencia(this)">A</button></td>
-                    <td><button class="bloque_estado ${getClaseActiva('T')}" data-alumno-id="${alumno.id}" data-estado="T" onclick="manejarBloqueAsistencia(this)">T</button></td>
-                    <td><button class="bloque_estado ${getClaseActiva('RA')}" data-alumno-id="${alumno.id}" data-estado="RA" onclick="manejarBloqueAsistencia(this)">RA</button></td>
-                    <td><button class="bloque_estado ${getClaseActiva('AP')}" data-alumno-id="${alumno.id}" data-estado="AP" onclick="manejarBloqueAsistencia(this)">AP</button></td> <td><span class="estado_reciente">${estadoReciente}</span></td>
+                    ${ESTADOS_VALIDOS.map(estado => `
+                        <td>
+                            <div class="checkbox-container">
+                                <div class="custom-checkbox ${getClaseActiva(estado)}" 
+                                    data-alumno-id="${alumno.id}" 
+                                    data-estado="${estado}" 
+                                    onclick="manejarCheckboxAsistencia(this)">
+                                </div>
+                            </div>
+                        </td>
+                    `).join('')}
+                    <td><span class="estado_reciente">${estadoReciente}</span></td>
                 </tr>
             `;
         }
@@ -112,26 +125,41 @@ async function cargarAlumnos(cursoId, materiaId) {
 
     } catch (error) {
         console.error('Error al cargar alumnos:', error);
-        listaAlumnos.innerHTML = '<p>ERROR AL CARGAR LA LISTA DE ALUMNOS.</p>';
+        listaAlumnos.innerHTML = '<p>Error al cargar la lista de alumnos.</p>';
     }
 }
 
-window.manejarBloqueAsistencia = async function(boton) {
+// Lógica de manejo de la selección (simula el radio button)
+window.manejarCheckboxAsistencia = async function(checkbox) {
     const selectorCurso = document.getElementById('selectorCurso');
     const selectorMateria = document.getElementById('selectorMateria');
     const inputInicio = document.getElementById('fechaInicio');
     const inputFin = document.getElementById('fechaFin');
     
-    const alumno_id = boton.dataset.alumnoId;
-    const estado = boton.dataset.estado;
+    const alumno_id = checkbox.dataset.alumnoId;
+    const estado = checkbox.dataset.estado;
     const curso_id = selectorCurso.value;
     const materia_id = selectorMateria.value;
 
     if (!curso_id || !materia_id) {
-        alert('¡ERROR! Debes seleccionar un Curso y una Materia para registrar asistencia.');
+        alert('¡Error! Debes seleccionar un curso y una materia para registrar asistencia.');
         return;
     }
     
+    const fila = checkbox.closest('tr');
+    const celdaUltimoRegistro = fila.querySelector('.estado_reciente');
+    
+    // Si ya está activo, deselecciona y registra "N/A" (o un estado por defecto si lo tienes)
+    // Para simplificar, si está activo, no hacemos nada para evitar registros dobles innecesarios,
+    // simplemente aseguramos que sea una nueva selección.
+    
+    // 1. Quita la clase ACTIVO de todos los checkboxes en la misma fila (mismo alumno)
+    fila.querySelectorAll('.custom-checkbox').forEach(c => c.classList.remove('ACTIVO'));
+    
+    // 2. Marca este checkbox como ACTIVO
+    checkbox.classList.add('ACTIVO');
+
+    // 3. Registra el nuevo estado
     const data = { alumno_id, curso_id, estado, materia_id };
 
     try {
@@ -141,23 +169,20 @@ window.manejarBloqueAsistencia = async function(boton) {
             body: JSON.stringify(data)
         });
         
-        const fila = boton.closest('tr');
-        const celdaUltimoRegistro = fila.querySelector('.estado_reciente');
-        
         if (respuesta.ok) {
-            fila.querySelectorAll('.bloque_estado').forEach(b => b.classList.remove('ACTIVO'));
-            boton.classList.add('ACTIVO');
             celdaUltimoRegistro.textContent = estado;
-            
             cargarHistorial(inputInicio.value, inputFin.value); 
         } else {
             const errorData = await respuesta.json();
-            alert(`ERROR EN REGISTRO. Mensaje del Servidor: ${errorData.message}`);
+            alert(`Error en registro. Mensaje del servidor: ${errorData.message}`);
+            // En caso de error, volvemos a marcar el estado anterior si es posible
+            checkbox.classList.remove('ACTIVO'); 
         }
 
     } catch (error) {
         console.error('Error al registrar:', error);
-        alert('ERROR CRÍTICO DE CONEXIÓN. REVISE EL SERVIDOR.');
+        alert('Error crítico de conexión. Revise el servidor.');
+        checkbox.classList.remove('ACTIVO');
     }
 }
 
@@ -167,8 +192,8 @@ async function cargarHistorial(fechaInicio, fechaFin) {
     contenedorTablaHistorial.innerHTML = '<p>Cargando registros...</p>';
 
     if (!fechaInicio || !fechaFin) {
-         contenedorTablaHistorial.innerHTML = '<p>Ingrese las fechas para ver el historial.</p>';
-         return;
+           contenedorTablaHistorial.innerHTML = '<p>Ingrese las fechas para ver el historial.</p>';
+           return;
     }
 
     try {
@@ -185,12 +210,12 @@ async function cargarHistorial(fechaInicio, fechaFin) {
             <table class="history-table">
                 <thead>
                     <tr>
-                        <th>FECHA Y HORA</th>
-                        <th>APELLIDO Y NOMBRE</th>
-                        <th>CURSO</th>
-                        <th>MATERIA</th>
-                        <th>ESTADO</th>
-                        <th>EDITAR</th> </tr>
+                        <th>Fecha y hora</th>
+                        <th>Apellido y nombre</th>
+                        <th>Curso</th>
+                        <th>Materia</th>
+                        <th>Estado</th>
+                        <th>Editar</th> </tr>
                 </thead>
                 <tbody>
         `;
@@ -216,7 +241,7 @@ async function cargarHistorial(fechaInicio, fechaFin) {
 
     } catch (error) {
         console.error('Error al cargar historial:', error);
-        contenedorTablaHistorial.innerHTML = '<p>ERROR DE CONEXIÓN AL CARGAR EL HISTORIAL.</p>';
+        contenedorTablaHistorial.innerHTML = '<p>Error de conexión al cargar el historial.</p>';
     }
 }
 
@@ -248,18 +273,16 @@ window.manejarEditarAsistencia = async function(registroId) {
         if (respuesta.ok) {
             alert('Registro actualizado con éxito.');
             cargarHistorial(inputInicio.value, inputFin.value);
-            // Opcionalmente, también recargar la lista de alumnos para actualizar el "ÚLTIMO REGISTRO"
         } else {
             const errorData = await respuesta.json();
-            alert(`error al actualizar: ${errorData.message}`);
+            alert(`Error al actualizar: ${errorData.message}`);
         }
     } catch (error) {
         console.error('Error al editar:', error);
-        alert(' ERROR CRÍTICO DE CONEXIÓN al editar.');
+        alert(' Error crítico de conexión al editar.');
     }
 }
 
-// 8. Manejar el Borrado del Registro (Botón X)
 window.manejarBorrarAsistencia = async function(registroId) {
     if (!confirm(`¿Está seguro de que desea eliminar el registro de ID ${registroId}? Esta acción no se puede deshacer.`)) {
         return;
@@ -276,14 +299,13 @@ window.manejarBorrarAsistencia = async function(registroId) {
         if (respuesta.ok) {
             alert('Registro eliminado con éxito.');
             cargarHistorial(inputInicio.value, inputFin.value);
-            // Opcionalmente, recargar la lista de alumnos
         } else {
             const errorData = await respuesta.json();
             alert(`Error al eliminar: ${errorData.message}`);
         }
     } catch (error) {
         console.error('Error al eliminar:', error);
-        alert('ERROR CRÍTICO DE CONEXIÓN al eliminar.');
+        alert('Error crítico de conexión al eliminar.');
     }
 }
 
@@ -354,8 +376,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         if (!data.nombre || !data.apellido || !data.curso_id) {
-            mensajeRespuesta.textContent = 'COMPLETE TODOS LOS CAMPOS.';
-            mensajeRespuesta.style.color = '#E74C3C';
+            mensajeRespuesta.textContent = 'Complete todos los campos.';
+            mensajeRespuesta.style.color = '#E74C3C'; // Rojo
             return;
         }
 
@@ -369,8 +391,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const resultado = await respuesta.json();
 
             if (respuesta.ok) {
-                mensajeRespuesta.textContent = `ÉXITO. ${resultado.mensaje}`;
-                mensajeRespuesta.style.color = '#175447';
+                mensajeRespuesta.textContent = `Éxito. ${resultado.mensaje}`;
+                mensajeRespuesta.style.color = '#000000'; // Negro
                 
                 formularioAltaAlumno.reset();
                 
@@ -380,12 +402,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 
             } else {
-                mensajeRespuesta.textContent = `ERROR: ${resultado.mensaje}`;
-                mensajeRespuesta.style.color = '#E74C3C';
+                mensajeRespuesta.textContent = `Error: ${resultado.mensaje}`;
+                mensajeRespuesta.style.color = '#E74C3C'; // Rojo
             }
         } catch (error) {
-            mensajeRespuesta.textContent = 'ERROR DE RED.';
-            mensajeRespuesta.style.color = '#E74C3C';
+            mensajeRespuesta.textContent = 'Error de red.';
+            mensajeRespuesta.style.color = '#E74C3C'; // Rojo
         }
     });
 
@@ -395,4 +417,3 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarHistorial(inputInicio.value, inputFin.value);
 
 });
-
